@@ -2,11 +2,10 @@ package org.example.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
-import java.time.LocalDate;
+import java.time.LocalDateTime; // Изменим импорт
 
 @Entity
-@Table(name = "transactions") // Указываем существующую таблицу
+@Table(name = "transactions")
 @Data
 public class Transaction {
     @Id
@@ -20,6 +19,9 @@ public class Transaction {
     private Product product;
 
     private int quantity;
-    private LocalDate date;
+
+    @Column(name = "timestamp", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private LocalDateTime timestamp; // Изменим тип и имя поля
+
     private Double totalPrice;
 }
