@@ -2,7 +2,7 @@ package org.example.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import java.time.LocalDateTime; // Изменим импорт
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "transactions")
