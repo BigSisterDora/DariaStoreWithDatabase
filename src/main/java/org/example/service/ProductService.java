@@ -1,23 +1,23 @@
 package org.example.service;
 
+import org.example.interfaces.ProductServiceInterface;
 import org.example.model.Product;
 import org.example.repository.ProductRepository;
 import org.example.tools.Input;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ProductService {
+public class ProductService implements ProductServiceInterface {
     private final ProductRepository productRepository;
     private final Input input;
 
-    @Autowired
     public ProductService(ProductRepository productRepository, Input input) {
         this.productRepository = productRepository;
         this.input = input;
     }
 
+    @Override
     public void addProduct(Product product) {
         try {
             productRepository.save(product);
@@ -27,6 +27,7 @@ public class ProductService {
         }
     }
 
+    @Override
     public void updateProduct(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
@@ -58,15 +59,18 @@ public class ProductService {
         System.out.println("Product updated successfully!");
     }
 
+    @Override
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
 
+    @Override
     public Product findById(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
     }
 
+    @Override
     public void deleteProduct(Long id) {
         try {
             productRepository.deleteById(id);
@@ -76,10 +80,12 @@ public class ProductService {
         }
     }
 
+    @Override
     public boolean hasEnoughStock(Product product, int quantity) {
         return product.getQuantity() >= quantity;
     }
 
+    @Override
     public void updateStock(Product product, int quantity) {
         product.setQuantity(product.getQuantity() - quantity);
         productRepository.save(product);

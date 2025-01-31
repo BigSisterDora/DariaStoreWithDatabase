@@ -1,5 +1,6 @@
 package org.example.helpers;
 
+import org.example.interfaces.TransactionDataInputInterface;
 import org.example.model.Customer;
 import org.example.model.Product;
 import org.example.service.CustomerService;
@@ -9,7 +10,7 @@ import org.example.tools.Input;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TransactionDataInput {
+public class TransactionDataInput implements TransactionDataInputInterface {
     private final Input input;
     private final TransactionService transactionService;
     private final CustomerService customerService;
@@ -31,6 +32,7 @@ public class TransactionDataInput {
         this.productDataInput = productDataInput;
     }
 
+    @Override
     public void makePurchase() {
         System.out.println("\n===== New Purchase =====");
         customerDataInput.listCustomers();

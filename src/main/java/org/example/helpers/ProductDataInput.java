@@ -1,12 +1,13 @@
 package org.example.helpers;
 
+import org.example.interfaces.ProductDataInputInterface;
 import org.example.model.Product;
 import org.example.service.ProductService;
 import org.example.tools.Input;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ProductDataInput {
+public class ProductDataInput implements ProductDataInputInterface {
     private final Input input;
     private final ProductService productService;
 
@@ -15,6 +16,7 @@ public class ProductDataInput {
         this.productService = productService;
     }
 
+    @Override
     public Product createProduct() {
         Product product = new Product();
         System.out.println("Enter product name:");
@@ -26,11 +28,13 @@ public class ProductDataInput {
         return product;
     }
 
+    @Override
     public void addProduct() {
         Product product = createProduct();
         productService.addProduct(product);
     }
 
+    @Override
     public void listProducts() {
         System.out.println("\n===== Product List =====");
         productService.getAllProducts().forEach(product ->
@@ -40,12 +44,14 @@ public class ProductDataInput {
         );
     }
 
+    @Override
     public void editProduct() {
         System.out.println("Enter product ID to edit:");
         Long id = Long.parseLong(input.nextLine());
         productService.updateProduct(id);
     }
 
+    @Override
     public void deleteProduct() {
         System.out.println("Enter product ID to delete:");
         Long id = Long.parseLong(input.nextLine());

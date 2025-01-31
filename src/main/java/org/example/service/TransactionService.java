@@ -1,5 +1,6 @@
 package org.example.service;
 
+import org.example.interfaces.TransactionServiceInterface;
 import org.example.model.Customer;
 import org.example.model.Product;
 import org.example.model.Transaction;
@@ -14,7 +15,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Service
-public class TransactionService {
+public class TransactionService implements TransactionServiceInterface {
     private final TransactionRepository transactionRepository;
     private final CustomerRepository customerRepository;
     private final ProductRepository productRepository;
@@ -27,6 +28,7 @@ public class TransactionService {
         this.productRepository = productRepository;
     }
 
+    @Override
     public Transaction createTransaction(Long customerId, Long productId, int quantity) {
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new RuntimeException("Покупатель с ID " + customerId + " не найден"));
@@ -48,7 +50,7 @@ public class TransactionService {
         transaction.setCustomer(customer);
         transaction.setProduct(product);
         transaction.setQuantity(quantity);
-        transaction.setTimestamp(LocalDateTime.now()); // Устанавливаем текущее время
+        transaction.setTimestamp(LocalDateTime.now());
         transaction.setTotalPrice(totalPrice);
 
         product.setQuantity(product.getQuantity() - quantity);
@@ -59,16 +61,18 @@ public class TransactionService {
         return transactionRepository.save(transaction);
     }
 
+    @Override
     public List<Transaction> getTransactionsByDate(LocalDate startDate, LocalDate endDate) {
-        // Конвертируем LocalDate в LocalDateTime для начала и конца дня
         LocalDateTime startDateTime = startDate.atStartOfDay();
         LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
-
         return transactionRepository.findByTimestampBetween(startDateTime, endDateTime);
     }
 
+    @Override
     public double getRevenue() {
         List<Transaction> transactions = transactionRepository.findAll();
-        return transactions.stream().mapToDouble(Transaction::getTotalPrice).sum();
+        return transactions.stream()
+                .mapToDouble(Transaction::getTotalPrice)
+                .sum();
     }
 }

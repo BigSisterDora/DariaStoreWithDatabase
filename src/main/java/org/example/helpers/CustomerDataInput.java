@@ -1,12 +1,13 @@
 package org.example.helpers;
 
+import org.example.interfaces.CustomerDataInputInterface;
 import org.example.model.Customer;
 import org.example.service.CustomerService;
 import org.example.tools.Input;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CustomerDataInput {
+public class CustomerDataInput implements CustomerDataInputInterface {
     private final Input input;
     private final CustomerService customerService;
 
@@ -15,6 +16,7 @@ public class CustomerDataInput {
         this.customerService = customerService;
     }
 
+    @Override
     public Customer createCustomer() {
         Customer customer = new Customer();
         System.out.println("===== New Customer =====");
@@ -25,6 +27,7 @@ public class CustomerDataInput {
         return customer;
     }
 
+    @Override
     public Customer editCustomer(Customer existingCustomer) {
         System.out.println("===== Edit Customer =====");
         System.out.println("Current name: " + existingCustomer.getName());
@@ -43,11 +46,13 @@ public class CustomerDataInput {
         return existingCustomer;
     }
 
+    @Override
     public void addCustomer() {
         Customer customer = createCustomer();
         customerService.addCustomer(customer);
     }
 
+    @Override
     public void listCustomers() {
         System.out.println("\n===== Customer List =====");
         customerService.getAllCustomers().forEach(customer ->
@@ -57,6 +62,7 @@ public class CustomerDataInput {
         );
     }
 
+    @Override
     public void editCustomer() {
         System.out.println("Enter customer ID to edit:");
         Long id = Long.parseLong(input.nextLine());
@@ -67,6 +73,7 @@ public class CustomerDataInput {
         }
     }
 
+    @Override
     public void deleteCustomer() {
         System.out.println("Enter customer ID to delete:");
         Long id = Long.parseLong(input.nextLine());
